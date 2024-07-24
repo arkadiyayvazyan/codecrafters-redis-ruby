@@ -1,5 +1,8 @@
-require "socket"
+# frozen_string_literal: true
 
+require 'socket'
+
+# this is the documentation
 class YourRedisServer
   def initialize(port)
     @port = port
@@ -7,11 +10,12 @@ class YourRedisServer
 
   def start
     # You can use print statements as follows for debugging, they'll be visible when running tests.
-    puts("Logs from your program will appear here!")
+    puts('Logs from your program will appear here!')
 
     # Uncomment this block to pass the first stage
     server = TCPServer.new(@port)
     client = server.accept
+    client.puts("+PONG\r")
   end
 end
 
