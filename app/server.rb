@@ -9,14 +9,23 @@ class YourRedisServer
   end
 
   def start
-    # You can use print statements as follows for debugging, they'll be visible when running tests.
-    puts('Logs from your program will appear here!')
+    Socket.tcp_server_loop(@port) do |sock, _|
+      Thread.new do
+        handle_event(sock)
+        sock.close
+      end
+    end
+  end
 
-    # Uncomment this block to pass the first stage
-    server = TCPServer.new(@port)
-    client = server.accept
-    while line = client.gets
-      client.puts("+PONG\r") if line == "PING\r\n"
+  private
+
+  def handle_event(client)
+    while event = client.gets&.chomp
+      p event
+      case event
+      when 'PING'
+        client.puts("+PONG\r")
+      end
     end
   end
 end
